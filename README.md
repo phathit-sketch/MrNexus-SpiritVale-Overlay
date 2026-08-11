@@ -7,6 +7,7 @@
 Lightweight • Portable • Sound Packs • Own Drop Detection
 
 **Created by MrNexus**
+สนับสนุนค่ากาแฟ https://easydonate.app/mrnexus
 
 ---
 
@@ -23,25 +24,26 @@ Lightweight • Portable • Sound Packs • Own Drop Detection
 
 ## SpiritVale Drops Overlay คืออะไร?
 
-SpiritVale Drops Overlay เป็นโปรแกรม Overlay สำหรับเกม **SpiritVale**
-ที่ตรวจจับ Rare Drop จากข้อมูล Packet ของเกม และแจ้งเตือนผ่านเสียงแบบเรียลไทม์
+SpiritVale Drops Overlay เป็นโปรแกรม Overlay สำหรับเกม **SpiritVale** ที่ตรวจจับ Rare Drop จากข้อมูล Network Packet ของเกม พร้อมระบบแจ้งเตือนด้วยเสียง, Grind Tracker, History และ Profiles
 
-โปรแกรมถูกออกแบบให้มีขนาดเล็ก ใช้งานง่าย และไม่ต้องติดตั้ง (Portable)
+โปรแกรมเป็น **Portable** ไม่ต้องติดตั้ง เพียงแตกไฟล์แล้วเปิดใช้งานได้ทันที
 
 ---
 
-# ✨ คุณสมบัติ
+# ✨ Features
 
-- 🎯 ตรวจจับ Rare Drop จาก Packet
-- 👤 ตรวจสอบว่าเป็น Drop ของตัวเอง (Own Drop Detection)
-- 🔊 ระบบ Sound Pack
-- 📊 Grind Tracker
-- 🕒 History
-- 💾 Profiles
-- 🎨 Overlay โปร่งใส
-- ⚡ Ctrl + Alt + O ซ่อน/แสดง Overlay
-- 📦 Portable Build
-- 📝 Runtime Logger
+| Feature | รายละเอียด |
+| --- | --- |
+| 🎯 Rare Drop Detection | ตรวจจับ Rare Drop จาก Packet |
+| 👤 Own Drop Detection | แจ้งเตือนเฉพาะ Rare Drop ของตัวเอง |
+| 🔊 Custom Sound Packs | เปลี่ยนชุดเสียงได้ |
+| 📊 Grind Tracker | นับเวลา Kill Coins EXP |
+| 📜 Drop History | บันทึก Rare Drop |
+| 💾 Profiles | บันทึกการตั้งค่าหลายชุด |
+| ⌨ Ctrl + Alt + O | ซ่อน/แสดง Overlay |
+| 📦 Portable | ใช้งานได้โดยไม่ต้องติดตั้ง |
+| 📝 Runtime Logs | เก็บ Log สำหรับตรวจสอบปัญหา |
+
 
 ---
 
@@ -114,13 +116,16 @@ SpiritValeDropsOverlay/
 
 https://npcap.com
 
+ถ้าไม่ติดตั้งจะไม่สามารถใช้งานได้นะครับ
+
 ---
 
 ## 4. เปิดโปรแกรม
 
 ```
-SpiritValeDropsOverlay.exe
+SpiritValeDropsOverlay.exe ซึ่งจะอยู่ใน folder bin
 ```
+> อย่าย้ายไฟล์ EXE ออกจากโฟลเดอร์ `bin`
 
 จากนั้นเปิดเกม SpiritVale
 
@@ -140,18 +145,78 @@ Ctrl + Alt + O
 
 # 🔊 Sound Pack
 
-สามารถสร้าง Sound Pack ได้เอง
+โฟลเดอร์ Sound Pack
 
+```text
+sounds/packs/
 ```
+
+สร้างโฟลเดอร์ใหม่ได้เอง เช่น
+
+```text
 sounds/
 └── packs/
+    └── My Pack/
+        ├── card_boss.mp3
+        ├── card_normal.wav
+        ├── gem_boss.mp3
+        ├── gem_normal.wav
+        ├── essence.wav
+        ├── eggs.wav
+        └── lure_boss.wav
 ```
 
-หากไม่มีไฟล์เสียงบางไฟล์
+## สำคัญ
 
-ระบบจะใช้เสียงจาก Default โดยอัตโนมัติ
+- รองรับ `.mp3` และ `.wav`
+- สามารถเปลี่ยนเสียงได้ตามต้องการ
+- **ชื่อไฟล์ต้องตรงกับชื่อเดิม**
+
+เช่น
+
+```text
+card_boss.mp3
+```
+
+หากเปลี่ยนชื่อเป็น
+
+```text
+boss_card.mp3
+```
+
+Overlay จะหาไฟล์ไม่พบ
+
+หากไม่มีไฟล์บางไฟล์ Overlay จะใช้เสียงจาก Default โดยอัตโนมัติ
+
 
 ---
+
+# 👤 Own Drop Detection
+
+เมื่อเปิด **Own Drops Only**
+
+- แจ้งเตือนเฉพาะ Rare Drop ของตัวเอง
+- Rare Drop ของผู้เล่นคนอื่นจะไม่เล่นเสียง
+
+ในบางสถานการณ์เสียงอาจดังหลังเก็บของ เพราะ Overlay ต้องรอ Packet เพิ่มเติมเพื่อยืนยันเจ้าของ Drop
+
+นี่เป็นพฤติกรรมที่ออกแบบไว้ ไม่ใช่ Bug
+
+---
+
+# 📊 Grind Tracker
+
+เก็บ
+
+- เวลา
+- Kill
+- Coins
+- EXP
+
+เริ่มเมื่อกด Start และหยุดเมื่อกด Stop
+
+---
+
 
 # 👤 Profiles
 
@@ -244,7 +309,7 @@ sounds/packs/
 หากโปรแกรมนี้มีประโยชน์สำหรับคุณ
 และต้องการสนับสนุนการพัฒนาต่อ
 
-สามารถสนับสนุน **MrNexus**
+สามารถสนับสนุน **MrNexus** ได้ที่ลิงค์ด้านล่างนะครับ
 
 > https://easydonate.app/mrnexus
 
