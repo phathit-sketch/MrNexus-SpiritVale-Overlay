@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>SpiritVale Drops Overlay</title>
+  <link rel="stylesheet" href="views://overlayview/index.css" />
+  <script type="module" src="views://overlayview/index.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <span class="title electrobun-webkit-app-region-drag">
+        <span class="tabs electrobun-webkit-app-region-no-drag">
+          <button id="tabDrops" class="tab active" type="button" title="Rare drop feed">🎯 Drops</button>
+          <button id="tabGrind" class="tab" type="button" title="Grind session tracker">📊 Grind</button>
+          <button id="tabHistory" class="tab" type="button" title="Rare drop history and statistics">🕘 History</button>
+        </span>
+        <span class="st compact" id="st" title="connecting">○</span>
+      </span>
+
+      <span class="ctl electrobun-webkit-app-region-no-drag">
+        <button id="settingsBtn" title="Preferences">⚙</button>
+        <button id="min" title="ย่อ/ขยาย">▁</button>
+        <button id="close" title="ปิดโปรแกรม">✕</button>
+      </span>
+    </header>
+
+    <div id="settingsPopover" class="settingsPopover hidden electrobun-webkit-app-region-no-drag">
+      <div class="settingsTitle">Preferences</div>
+
+      <div class="settingsSection profileSection">
+        <div class="settingLabel">Profile</div>
+        <div class="profileRow">
+          <select id="profileSelect" aria-label="Profile"></select>
+          <button id="profileNew" class="miniBtn add" type="button" title="New profile">＋</button>
+          <button id="profileDuplicate" class="miniBtn" type="button" title="Duplicate profile">⧉</button>
+          <button id="profileDelete" class="miniBtn danger" type="button" title="Delete profile">🗑</button>
+        </div>
+      </div>
+
+      <div class="settingsSection">
+        <div class="settingLabel">Sound Pack</div>
+        <div class="packRow">
+          <select id="soundPackSelect" aria-label="Sound Pack"></select>
+          <button id="openSoundsBtn" class="textMiniBtn packIconBtn" type="button" title="Open Packs Folder" aria-label="Open Packs Folder">📁</button>
+        </div>
+        <div class="packHint">Missing sounds → Default</div>
+      </div>
+
+      <div class="settingsSection">
+        <label class="settingRow">
+          <span>Volume</span>
+          <div class="settingControl">
+            <span class="settingIcon">🔊</span>
+            <input id="vol" type="range" min="0" max="100" />
+            <span id="volValue" class="settingValue">100%</span>
+          </div>
+        </label>
+
+        <label class="settingRow">
+          <span>Opacity</span>
+          <div class="settingControl">
+            <span class="settingIcon">◐</span>
+            <input id="op" type="range" min="15" max="100" />
+            <span id="opValue" class="settingValue">86%</span>
+          </div>
+        </label>
+
+        <label class="settingCheck">
+          <input id="own" type="checkbox" />
+          <span>Own drops only</span>
+        </label>
+      </div>
+
+      <div class="settingsSection soundSection">
+        <div class="soundHeader">
+          <div class="settingLabel">Sounds</div>
+          <div class="soundActions">
+            <button id="soundsAll" type="button">All</button>
+            <button id="soundsNone" type="button">None</button>
+          </div>
+        </div>
+        <div class="soundGrid grouped">
+          <label class="soundCheck"><input data-sound-key="card_boss" type="checkbox" /><span>Boss Card</span></label>
+          <label class="soundCheck"><input data-sound-key="card_normal" type="checkbox" /><span>Normal Card</span></label>
+          <label class="soundCheck"><input data-sound-key="gem_boss" type="checkbox" /><span>Boss Gem</span></label>
+          <label class="soundCheck"><input data-sound-key="gem_normal" type="checkbox" /><span>Normal Gem</span></label>
+          <label class="soundCheck"><input data-sound-key="essence" type="checkbox" /><span>Essence</span></label>
+          <label class="soundCheck"><input data-sound-key="eggs" type="checkbox" /><span>Eggs / Boxes</span></label>
+          <label class="soundCheck"><input data-sound-key="lure_boss" type="checkbox" /><span>Boss Lure</span></label>
+        </div>
+      </div>
+
+      <div class="settingsSection hotkeySection">
+        <div class="settingLabel">Hotkey</div>
+
+        <div class="hotkeyRow" id="hotkeyDisplay">
+          <span class="hotkeyKeyboard">⌨</span>
+          <kbd>Ctrl</kbd><span>+</span><kbd>Alt</kbd><span>+</span><kbd>O</kbd>
+        </div>
+
+        <div class="hotkeyPurpose">Hide / Show Overlay</div>
+        <div class="hotkeyHint">Capture continues while hidden</div>
+      </div>
+
+      <div class="preferencesFooter">
+        <button id="openConfigBtn" type="button" title="Open settings.json">⚙ Config</button>
+        <button id="aboutBtn" type="button" title="About this overlay">ⓘ About</button>
+      </div>
+      <div id="settingsStatus" class="settingsStatus"></div>
+    </div>
+
+
+    <main id="content">
+      <section id="dropsView" class="view active">
+        <div id="feed"></div>
+        <footer><span id="cnt">0</span><span class="hint">หล่น = ส้ม · เก็บ = เขียว</span></footer>
+      </section>
+
+      <section id="grindView" class="view">
+        <div id="grind" class="electrobun-webkit-app-region-no-drag">
+          <div class="grid">
+            <div class="stat"><span>⏱ Time</span><b id="gTime">00:00</b></div>
+            <div class="stat"><span>⚔️ Kills</span><b id="gKills">0</b></div>
+            <div class="stat"><span>💰 Coins</span><b id="gCoins">0</b></div>
+            <div class="stat"><span>✨ EXP</span><b id="gExp">0</b></div>
+          </div>
+
+          <div class="gctl">
+            <input id="gDur" type="number" min="0" placeholder="Minutes" />
+            <button id="gStart" title="Start a new grind session">▶ Start</button>
+            <button id="gStop" title="Stop grind and show summary" disabled>■ Stop</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="historyView" class="view">
+        <div id="history">
+          <div class="historyTop">
+            <div class="historyStats">
+              <div class="hstat"><span>⭐ วันนี้</span><b id="hTodayTotal">0</b></div>
+              <div class="hstat"><span>🧩 Unique</span><b id="hTodayUnique">0</b></div>
+            </div>
+            <button id="hClear" class="ghostBtn" type="button" title="Clear rare history">Clear</button>
+          </div>
+
+          <div class="historySection">
+            <div class="sectionTitle">Today Drops</div>
+            <div id="historyStatsList" class="statsList empty">ยังไม่มี rare drop วันนี้</div>
+          </div>
+
+          <div class="historySection historyLogSection">
+            <div class="sectionTitle">Recent Drops</div>
+            <div id="historyList" class="historyList empty">ยังไม่มีประวัติ</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+
+    <div id="summaryBackdrop" class="summaryBackdrop hidden electrobun-webkit-app-region-no-drag">
+      <div class="summaryCard" role="dialog" aria-modal="true">
+        <div class="summaryHead">
+          <div>
+            <div class="summaryTitle">Grind Summary</div>
+            <div id="summaryDate" class="summaryDate"></div>
+          </div>
+          <button id="summaryClose" class="summaryClose" type="button">✕</button>
+        </div>
+
+        <div class="summaryGrid">
+          <div class="sstat"><span>⏱ Time</span><b id="sTime">00:00</b></div>
+          <div class="sstat"><span>⚔️ Kills</span><b id="sKills">0</b></div>
+          <div class="sstat"><span>💰 Coins</span><b id="sCoins">0</b></div>
+          <div class="sstat"><span>✨ EXP</span><b id="sExp">0</b></div>
+        </div>
+
+        <div class="summaryRareTitle">Rare Drops</div>
+        <div id="summaryRare" class="summaryRare empty">ไม่มี rare drop ใน session นี้</div>
+      </div>
+    </div>
+
+
+    <div id="aboutBackdrop" class="summaryBackdrop hidden electrobun-webkit-app-region-no-drag">
+      <div class="aboutCard">
+        <div class="summaryHead">
+          <div>
+            <div class="summaryTitle" id="aboutName">SpiritVale Drops Overlay</div>
+            <div class="summaryDate" id="aboutVersion"></div>
+          </div>
+          <button id="aboutClose" class="summaryClose" type="button">✕</button>
+        </div>
+        <div class="aboutBody">
+          <div>Packet-based rare-drop sounds, grind tracking, profiles and sound packs for SpiritVale.</div>
+          <div class="aboutCredit"><span>Created by</span><b id="aboutAuthor">MrNexus</b></div>
+          <div class="aboutHotkey">
+            <span>Hotkey</span>
+            <b>Ctrl + Alt + O</b>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="rz" class="electrobun-webkit-app-region-no-drag" title="ลากปรับขนาด"></div>
+  </div>
+</body>
+</html>

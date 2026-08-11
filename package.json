@@ -1,0 +1,21 @@
+{
+  "name": "spiritvale-drops-overlay",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "electrobun dev",
+    "build": "electrobun build",
+    "build:stable": "electrobun build --env=stable",
+    "release:portable": "bun run scripts/release-portable.ts"
+  },
+  "dependencies": {
+    "electrobun": "latest",
+    "@kar-mi/spirit-vale-tools-capture": "latest",
+    "@kar-mi/spirit-vale-tools-combat": "latest",
+    "@kar-mi/spirit-vale-tools-rewards": "latest"
+  },
+  "version": "1.0.0",
+  "description": "Portable rare-drop sound and grind overlay for SpiritVale.",
+  "author": "MrNexus",
+  "license": "UNLICENSED"
+}

@@ -1,0 +1,899 @@
+:root{--line:#2a2f39;--dim:#98a0ad;--panel:#0c0e12;--soft:#ffffff0d;--soft2:#ffffff14}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:transparent;color:#eef2f7;font-family:"Segoe UI",Tahoma,sans-serif;overflow:hidden;user-select:none}
+#app{height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;background:var(--panel);border:1px solid rgba(255,255,255,.10);border-radius:12px}
+header{display:flex;align-items:center;gap:6px;padding:6px 9px;border-bottom:1px solid var(--line);min-height:34px}
+.title{flex:1;display:flex;align-items:center;gap:8px;min-width:0;cursor:move}
+.title .st{font-size:10px;color:var(--dim);white-space:nowrap}
+.tabs{display:flex;align-items:center;gap:3px}
+.tab{border:0;background:transparent;color:#8f98a7;border-radius:6px;padding:4px 7px;font-size:11px;font-weight:600;cursor:pointer}
+.tab:hover{background:#ffffff12;color:#dfe6ef}
+.tab.active{background:#ffffff18;color:#fff}
+.ctl{display:flex;align-items:center;gap:4px}
+.ctl .ico{font-size:11px;opacity:.85;margin-left:2px}
+.ctl input[type=range]{width:46px;margin:0}
+.own{display:flex;align-items:center;gap:2px;font-size:10px;color:#cfd6e0;cursor:pointer;margin-left:2px}
+.own input{cursor:pointer;margin:0}
+.ctl button{background:#ffffff14;border:0;color:#cfd6e0;border-radius:5px;width:24px;height:20px;cursor:pointer;font-size:12px}
+.ctl button:hover{background:#ffffff30}
+#close:hover{background:#e5484d;color:#fff}
+#content{flex:1;min-height:0;position:relative;display:flex}
+.view{display:none;flex:1;min-width:0;min-height:0}
+.view.active{display:flex}
+#dropsView{flex-direction:column}
+#feed{flex:1;overflow-y:auto;padding:5px 8px;display:flex;flex-direction:column;gap:3px}
+#feed::-webkit-scrollbar{width:6px}
+#feed::-webkit-scrollbar-thumb{background:#39404c;border-radius:3px}
+.row{display:flex;align-items:baseline;gap:8px;font-size:13px;padding:2px 4px;border-radius:5px;animation:fl .5s;text-shadow:0 1px 2px #0009}
+@keyframes fl{from{background:#ffffff22}to{background:transparent}}
+.row .tm{color:var(--dim);font-size:10px;min-width:44px;flex:none}
+.row .msg{flex:1;line-height:1.35}
+.row .nm{font-weight:700;color:var(--c,#cfd6e0)}
+.ground .v{color:#ffb454}.pickup .v{color:#7ee081}
+.card_boss,.gem_boss,.lure_boss{--c:#ff6b6b}.eggs{--c:#c98bff}.essence{--c:#ffd24a}.card_normal,.gem_normal{--c:#66b8ff}
+footer{padding:3px 9px;border-top:1px solid var(--line);font-size:10px;color:var(--dim);display:flex;gap:12px}
+footer .hint{margin-left:auto}
+#grindView{flex-direction:column;overflow:auto}
+#grind{flex:1;padding:10px;display:flex;flex-direction:column;gap:10px;overflow:auto}
+#grind .grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+#grind .stat{display:flex;flex-direction:column;gap:4px;background:var(--soft);border:1px solid rgba(255,255,255,.035);border-radius:8px;padding:9px 10px;font-size:10px;color:var(--dim)}
+#grind .stat b{color:#fff;font-size:16px;line-height:1.1}
+#grind #gCoins{color:#ffd45e}
+#grind #gExp{color:#c9a7ff}
+#grind .gctl{margin-top:auto;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center}
+#grind #gDur{min-width:0;background:var(--soft2);border:1px solid var(--line);border-radius:6px;color:#fff;padding:6px 8px;font-size:11px;outline:none}
+#grind #gDur:focus{border-color:#4b6f9d}
+#grind .gctl button{border:0;color:#fff;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:11px}
+#grind #gStart{background:#1f6feb}
+#grind #gStop{background:#e5484d}
+#grind .gctl button:disabled{opacity:.4;cursor:default}
+#app.collapsed #content{display:none}
+#app.collapsed header{flex:1;border-bottom:0}
+#rz{position:absolute;right:0;bottom:0;width:16px;height:16px;cursor:nwse-resize;background:linear-gradient(135deg,transparent 55%,var(--dim) 55%,var(--dim) 63%,transparent 63%,transparent 74%,var(--dim) 74%,var(--dim) 82%,transparent 82%)}
+
+
+/* v1.1 History + Statistics */
+#historyView{flex-direction:column;overflow:hidden}
+#history{flex:1;min-height:0;padding:9px;display:flex;flex-direction:column;gap:9px;overflow:hidden}
+.historyTop{display:flex;align-items:center;gap:8px}
+.historyStats{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex:1}
+.hstat{display:flex;justify-content:space-between;align-items:center;background:var(--soft);border:1px solid rgba(255,255,255,.035);border-radius:8px;padding:7px 9px;font-size:10px;color:var(--dim)}
+.hstat b{font-size:14px;color:#fff}
+.ghostBtn{border:1px solid var(--line);background:#ffffff0b;color:#adb6c3;border-radius:6px;padding:6px 9px;font-size:10px;cursor:pointer}
+.ghostBtn:hover{background:#ffffff18;color:#fff}
+.historySection{display:flex;flex-direction:column;gap:5px;min-height:0}
+.historyLogSection{flex:1}
+.sectionTitle{font-size:10px;color:#7f8998;text-transform:uppercase;letter-spacing:.45px;padding:0 2px}
+.statsList{display:flex;flex-direction:column;gap:3px;max-height:110px;overflow:auto}
+.statRow{display:flex;align-items:center;gap:7px;background:#ffffff08;border-radius:5px;padding:4px 7px;font-size:11px}
+.statRow .statName{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.statRow .statCount{font-weight:700;color:#fff}
+.historyList{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:3px}
+.historyRow{display:flex;align-items:center;gap:8px;padding:5px 7px;border-radius:6px;background:#ffffff07;font-size:11px}
+.historyRow .hTime{font-size:9px;color:var(--dim);min-width:62px}
+.historyRow .hName{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.historyRow .hSound{font-size:9px;color:#758092}
+.statsList::-webkit-scrollbar,.historyList::-webkit-scrollbar,.summaryRare::-webkit-scrollbar{width:5px}
+.statsList::-webkit-scrollbar-thumb,.historyList::-webkit-scrollbar-thumb,.summaryRare::-webkit-scrollbar-thumb{background:#39404c;border-radius:3px}
+.empty{color:#6f7885;font-size:10px}
+
+/* v1.1 Session Summary */
+.summaryBackdrop{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:12px;background:#0009;backdrop-filter:blur(2px)}
+.summaryBackdrop.hidden{display:none}
+.summaryCard{width:min(330px,100%);max-height:calc(100% - 10px);overflow:hidden;display:flex;flex-direction:column;gap:9px;background:#11151b;border:1px solid #ffffff1f;border-radius:11px;padding:11px;box-shadow:0 12px 36px #000b}
+.summaryHead{display:flex;align-items:flex-start;gap:8px}
+.summaryHead>div{flex:1}
+.summaryTitle{font-size:14px;font-weight:700}
+.summaryDate{font-size:9px;color:var(--dim);margin-top:2px}
+.summaryClose{border:0;background:#ffffff10;color:#aeb7c4;border-radius:5px;width:24px;height:22px;cursor:pointer}
+.summaryClose:hover{background:#e5484d;color:#fff}
+.summaryGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sstat{display:flex;flex-direction:column;gap:3px;background:#ffffff0b;border-radius:7px;padding:7px 8px;color:var(--dim);font-size:9px}
+.sstat b{font-size:14px;color:#fff}
+#sCoins{color:#ffd45e}
+#sExp{color:#c9a7ff}
+.summaryRareTitle{font-size:10px;color:#8d96a4;border-top:1px solid var(--line);padding-top:8px}
+.summaryRare{min-height:28px;max-height:130px;overflow:auto;display:flex;flex-direction:column;gap:3px}
+.summaryRareRow{display:flex;align-items:center;gap:7px;background:#ffffff08;border-radius:5px;padding:5px 7px;font-size:10px}
+.summaryRareRow span:first-child{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.summaryRareRow b{color:#fff}
+
+
+/* Compact header + Settings */
+.title{gap:6px}
+.title .st.compact{
+  font-size:9px;
+  width:10px;
+  min-width:10px;
+  overflow:hidden;
+  color:#7ee081;
+  flex:none
+}
+#settingsBtn.active{background:#ffffff2a;color:#fff}
+.settingsPopover{
+  position:absolute;
+  top:34px;
+  right:8px;
+  z-index:45;
+  width:190px;
+  padding:10px;
+  background:#11151b;
+  border:1px solid #ffffff1c;
+  border-radius:9px;
+  box-shadow:0 10px 30px #000a;
+  display:flex;
+  flex-direction:column;
+  gap:10px
+}
+.settingsPopover.hidden{display:none}
+.settingsTitle{
+  font-size:11px;
+  font-weight:700;
+  color:#eef2f7;
+  padding-bottom:5px;
+  border-bottom:1px solid var(--line)
+}
+.settingRow{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  font-size:10px;
+  color:#aeb7c4
+}
+.settingControl{display:flex;align-items:center;gap:7px}
+.settingIcon{width:15px;text-align:center;opacity:.9}
+.settingControl input[type=range]{flex:1;min-width:0;margin:0}
+.settingCheck{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:10px;
+  color:#cfd6e0;
+  cursor:pointer
+}
+.settingCheck input{margin:0;cursor:pointer}
+
+
+/* =========================================================
+   v1.2 compact polish
+   Goal: compact 420x190-ish overlay, less debug-tool feel
+   ========================================================= */
+
+:root{
+  --line:rgba(255,255,255,.075);
+  --dim:#8f99a8;
+  --panel:rgba(14,16,21,.88);
+  --soft:rgba(255,255,255,.055);
+  --soft2:rgba(255,255,255,.075);
+  --hover:rgba(255,255,255,.10);
+}
+
+#app{
+  background:var(--panel);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:10px;
+  backdrop-filter:blur(7px);
+  box-shadow:0 7px 24px rgba(0,0,0,.25);
+}
+
+/* Header: shorter + calmer */
+header{
+  min-height:28px;
+  height:28px;
+  padding:3px 6px 3px 7px;
+  gap:4px;
+}
+.title{gap:4px}
+.tabs{gap:1px}
+.tab{
+  height:22px;
+  padding:2px 7px;
+  border-radius:5px;
+  font-size:10.5px;
+  line-height:18px;
+  font-weight:600;
+}
+.tab:hover{background:rgba(255,255,255,.075)}
+.tab.active{
+  background:rgba(255,255,255,.11);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);
+}
+.title .st.compact{
+  width:8px;
+  min-width:8px;
+  font-size:8px;
+  margin-left:1px;
+}
+
+.ctl{gap:3px}
+.ctl button{
+  width:23px;
+  height:21px;
+  padding:0;
+  border-radius:5px;
+  font-size:11px;
+  background:rgba(255,255,255,.055);
+}
+.ctl button:hover{background:rgba(255,255,255,.12)}
+
+/* Drops: gain usable room */
+#feed{
+  padding:4px 7px;
+  gap:2px;
+}
+.row{
+  gap:6px;
+  font-size:12px;
+  padding:2px 3px;
+}
+.row .tm{
+  min-width:39px;
+  font-size:9px;
+}
+footer{
+  min-height:20px;
+  padding:2px 7px;
+  font-size:9px;
+}
+
+/* -------------------------
+   Grind: intentionally short
+   ------------------------- */
+#grindView{
+  overflow:hidden;
+}
+#grind{
+  padding:6px 8px 7px;
+  gap:6px;
+  overflow:hidden;
+}
+#grind .grid{
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+}
+#grind .stat{
+  min-height:47px;
+  gap:1px;
+  padding:5px 8px;
+  border-radius:7px;
+  border:1px solid rgba(255,255,255,.025);
+  background:rgba(255,255,255,.048);
+  font-size:9px;
+}
+#grind .stat span{
+  line-height:14px;
+}
+#grind .stat b{
+  font-size:14px;
+  line-height:17px;
+  font-weight:700;
+}
+#grind .gctl{
+  margin-top:0;
+  grid-template-columns:minmax(0,1fr) 55px 55px;
+  gap:5px;
+}
+#grind #gDur{
+  height:27px;
+  padding:4px 7px;
+  border-radius:6px;
+  font-size:10px;
+}
+#grind .gctl button{
+  height:27px;
+  padding:4px 7px;
+  border-radius:6px;
+  font-size:10px;
+}
+#grind #gStart{background:#3478d4}
+#grind #gStop{background:#a94a50}
+
+/* -------------------------
+   History: denser + clearer
+   ------------------------- */
+#history{
+  padding:6px 8px 7px;
+  gap:6px;
+}
+.historyTop{
+  gap:5px;
+}
+.historyStats{
+  gap:5px;
+}
+.hstat{
+  min-height:30px;
+  padding:5px 8px;
+  border-radius:7px;
+  font-size:9px;
+  background:rgba(255,255,255,.048);
+}
+.hstat b{
+  font-size:13px;
+}
+.ghostBtn{
+  height:30px;
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:9px;
+}
+.historySection{
+  gap:3px;
+}
+.sectionTitle{
+  padding:0 1px;
+  font-size:8.5px;
+  letter-spacing:.35px;
+}
+.statsList{
+  max-height:70px;
+  gap:2px;
+}
+.statRow{
+  min-height:24px;
+  padding:3px 6px;
+  border-radius:5px;
+  font-size:10px;
+}
+.historyList{
+  gap:2px;
+}
+.historyRow{
+  min-height:25px;
+  padding:3px 6px;
+  gap:6px;
+  font-size:10px;
+}
+.historyRow .hTime{
+  min-width:54px;
+  font-size:8px;
+}
+.historyRow .hSound{
+  font-size:8px;
+}
+
+/* -------------------------
+   Settings: smaller, more polished
+   ------------------------- */
+.settingsPopover{
+  top:29px;
+  right:5px;
+  width:178px;
+  padding:9px;
+  gap:8px;
+  border-radius:8px;
+  background:rgba(18,21,28,.96);
+  border:1px solid rgba(255,255,255,.11);
+  box-shadow:0 12px 28px rgba(0,0,0,.42);
+  transform-origin:top right;
+  animation:settingsIn .12s ease-out;
+}
+@keyframes settingsIn{
+  from{opacity:0;transform:translateY(-3px) scale(.985)}
+  to{opacity:1;transform:none}
+}
+.settingsTitle{
+  padding-bottom:5px;
+  font-size:10px;
+}
+.settingRow{
+  gap:4px;
+  font-size:9px;
+}
+.settingControl{
+  gap:5px;
+}
+.settingIcon{
+  width:13px;
+  font-size:9px;
+}
+.settingCheck{
+  gap:6px;
+  font-size:9px;
+}
+
+/* -------------------------
+   Summary modal: compact
+   ------------------------- */
+.summaryBackdrop{padding:8px}
+.summaryCard{
+  width:min(300px,100%);
+  gap:7px;
+  padding:9px;
+  border-radius:9px;
+}
+.summaryTitle{font-size:12px}
+.summaryGrid{gap:5px}
+.sstat{padding:5px 7px}
+.sstat b{font-size:13px}
+.summaryRare{max-height:90px}
+
+
+/* =========================================================
+   Final polish pass
+   ========================================================= */
+
+/* Slightly tighter tabs */
+.tab{
+  padding-left:5px;
+  padding-right:5px;
+}
+
+/* Settings title simpler */
+.settingsTitle{
+  letter-spacing:.1px;
+}
+
+/* Settings gear micro-interaction */
+#settingsBtn{
+  transition:background .14s ease,color .14s ease,transform .15s ease;
+}
+#settingsBtn:hover{
+  transform:rotate(90deg);
+}
+#settingsBtn.active{
+  transform:rotate(90deg);
+}
+
+/* Feed category icon */
+.itemIcon{
+  display:inline-block;
+  width:14px;
+  text-align:center;
+  font-size:10px;
+  line-height:1;
+  transform:translateY(-.5px);
+}
+
+/* A touch less visual weight in settings */
+.settingsTitle{
+  border-bottom:0;
+  padding-bottom:1px;
+}
+.settingsPopover{
+  gap:7px;
+}
+.settingRow + .settingRow{
+  padding-top:1px;
+}
+
+/* History naming is more explicit, keep compact */
+.sectionTitle{
+  color:#8993a3;
+}
+
+/* Slightly cleaner grind input */
+#grind #gDur::placeholder{
+  color:#7d8795;
+  opacity:1;
+}
+
+
+/* =========================================================
+   Profiles + Sound Filters settings
+   ========================================================= */
+.settingsPopover{
+  width:226px;
+  max-height:calc(100vh - 36px);
+  overflow-y:auto;
+  padding:9px;
+  gap:7px;
+}
+.settingsPopover::-webkit-scrollbar{width:4px}
+.settingsPopover::-webkit-scrollbar-thumb{background:#3b4452;border-radius:3px}
+
+.settingsSection{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding-top:6px;
+  border-top:1px solid rgba(255,255,255,.065);
+}
+.settingsSection:first-of-type{
+  padding-top:3px;
+  border-top:0;
+}
+.settingLabel{
+  color:#919baa;
+  font-size:8.5px;
+  text-transform:uppercase;
+  letter-spacing:.42px;
+}
+
+.profileRow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 25px 25px;
+  gap:4px;
+}
+#profileSelect{
+  min-width:0;
+  height:26px;
+  padding:3px 7px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:6px;
+  outline:none;
+  color:#edf2f7;
+  background:#1a1f27;
+  font-size:9.5px;
+}
+#profileSelect:focus{border-color:#5079aa}
+.miniBtn{
+  height:26px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:6px;
+  color:#d7dee8;
+  background:rgba(255,255,255,.055);
+  cursor:pointer;
+  font-size:14px;
+  line-height:1;
+}
+.miniBtn:hover{background:rgba(255,255,255,.12)}
+.miniBtn.danger:hover{background:#7d353b}
+.miniBtn:disabled{opacity:.3;cursor:default}
+
+.settingControl{
+  display:grid;
+  grid-template-columns:13px minmax(0,1fr) 27px;
+  gap:5px;
+}
+.settingValue{
+  color:#7f8998;
+  font-size:8px;
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
+.soundGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3px 5px;
+}
+.soundCheck{
+  display:flex;
+  align-items:center;
+  min-width:0;
+  gap:4px;
+  padding:2px 0;
+  color:#c7ced9;
+  font-size:8.5px;
+  cursor:pointer;
+}
+.soundCheck input{
+  flex:none;
+  width:12px;
+  height:12px;
+  margin:0;
+  cursor:pointer;
+}
+.soundCheck span{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.settingsStatus{
+  min-height:11px;
+  color:#72cf91;
+  font-size:8px;
+  text-align:right;
+}
+.settingsStatus.error{color:#ff8388}
+
+
+/* =========================================================
+   v1.3 Preferences + Sound Packs
+   ========================================================= */
+.settingsPopover{
+  width:258px;
+  max-height:calc(100vh - 34px);
+}
+.profileRow{
+  grid-template-columns:minmax(0,1fr) 26px 26px 26px;
+}
+.miniBtn{
+  border-radius:50%;
+}
+.miniBtn.add:hover{
+  background:#2f72c9;
+  border-color:#4f8bd8;
+}
+.miniBtn.danger{
+  font-size:10px;
+}
+.miniBtn.danger:hover{
+  background:#8b383e;
+}
+
+.packRow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:5px;
+}
+#soundPackSelect{
+  min-width:0;
+  height:26px;
+  padding:3px 7px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:6px;
+  outline:none;
+  color:#edf2f7;
+  background:#1a1f27;
+  font-size:9.5px;
+}
+.textMiniBtn{
+  height:26px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.055);
+  color:#cfd6e0;
+  border-radius:6px;
+  padding:0 7px;
+  font-size:8px;
+  cursor:pointer;
+}
+.textMiniBtn:hover{background:rgba(255,255,255,.12);color:#fff}
+
+.soundHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+}
+.soundActions{
+  display:flex;
+  gap:3px;
+}
+.soundActions button{
+  border:0;
+  background:transparent;
+  color:#7f8a99;
+  padding:1px 3px;
+  font-size:7.5px;
+  cursor:pointer;
+}
+.soundActions button:hover{color:#fff}
+
+.soundGrid.grouped{
+  grid-template-columns:1fr 1fr;
+  column-gap:10px;
+  row-gap:2px;
+}
+.settingValue{
+  width:30px;
+}
+
+.preferencesFooter{
+  display:grid;
+  grid-template-columns:1fr 1.25fr .85fr;
+  gap:4px;
+  padding-top:6px;
+  border-top:1px solid rgba(255,255,255,.065);
+}
+.preferencesFooter button{
+  height:24px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.045);
+  color:#9ea8b7;
+  border-radius:5px;
+  font-size:7.5px;
+  cursor:pointer;
+}
+.preferencesFooter button:hover{background:rgba(255,255,255,.10);color:#fff}
+.preferencesFooter button:disabled{opacity:.45;cursor:default}
+
+.aboutCard{
+  width:min(280px,100%);
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  background:#11151b;
+  border:1px solid #ffffff1f;
+  border-radius:10px;
+  padding:11px;
+  box-shadow:0 12px 36px #000b;
+}
+.aboutBody{
+  color:#aeb7c4;
+  font-size:9px;
+  line-height:1.5;
+}
+
+
+/* Sound pack hint */
+.packHint{
+  color:#6f7988;
+  font-size:7.5px;
+  line-height:1.35;
+  margin-top:1px;
+}
+
+
+/* =========================================================
+   Final v1.3 polish
+   ========================================================= */
+
+/* Icon-only packs button */
+.packRow{
+  grid-template-columns:minmax(0,1fr) 28px;
+}
+.packIconBtn{
+  width:28px;
+  min-width:28px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+}
+
+/* Cleaner, shorter fallback hint */
+.packHint{
+  font-size:7.5px;
+  color:#7d8795;
+  margin-top:0;
+}
+
+/* More legible slider percentages */
+.settingValue{
+  color:#aeb8c6;
+  font-weight:600;
+  font-size:8px;
+}
+
+/* Footer polish */
+.preferencesFooter{
+  grid-template-columns:1fr 1.35fr .9fr;
+}
+.preferencesFooter button{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition:background .14s ease,color .14s ease,border-color .14s ease;
+}
+.preferencesFooter button.upToDate{
+  color:#79d99b;
+  border-color:rgba(121,217,155,.20);
+  background:rgba(121,217,155,.07);
+}
+.preferencesFooter button.updateAvailable{
+  color:#81b8ff;
+  border-color:rgba(129,184,255,.24);
+  background:rgba(129,184,255,.08);
+}
+
+/* Very small visual cleanup */
+.settingsTitle{
+  font-size:10.5px;
+}
+.settingsPopover{
+  scrollbar-gutter:stable;
+}
+
+
+/* =========================================================
+   v1.0 QoL — Preferences animation + hotkey hint
+   ========================================================= */
+
+/* Override the older keyframe animation with a deterministic 145ms transition,
+   so closing gets a fade/slide too. */
+.settingsPopover{
+  animation:none;
+  opacity:0;
+  transform:translateY(-4px) scale(.992);
+  pointer-events:none;
+  visibility:hidden;
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    visibility 0s linear 140ms;
+}
+.settingsPopover.open{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+  visibility:visible;
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    visibility 0s linear 0s;
+}
+.settingsPopover.hidden{
+  display:none;
+}
+
+.hotkeySection{
+  gap:4px;
+}
+.hotkeyRow{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  color:#8f99a8;
+  font-size:8px;
+}
+.hotkeyRow kbd{
+  min-width:22px;
+  height:19px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 5px;
+  border:1px solid rgba(255,255,255,.12);
+  border-bottom-color:rgba(255,255,255,.20);
+  border-radius:5px;
+  background:rgba(255,255,255,.055);
+  color:#d4dbe5;
+  font-family:"Segoe UI",Tahoma,sans-serif;
+  font-size:8px;
+  box-shadow:0 1px 0 rgba(255,255,255,.04);
+}
+.hotkeyAction{
+  margin-left:auto;
+  color:#c3ccd8;
+  white-space:nowrap;
+}
+.hotkeyHint{
+  color:#697482;
+  font-size:7.2px;
+  line-height:1.35;
+}
+
+/* Make native title tooltips easier to discover through cursor semantics. */
+.tab,
+#settingsBtn,
+#min,
+#close,
+#hClear,
+#gStart,
+#gStop,
+.preferencesFooter button,
+.miniBtn,
+.packIconBtn{
+  cursor:pointer;
+}
+
+.hotkeyUnavailable{
+  color:#ff8c91;
+  font-size:8px;
+  font-weight:600;
+}
+
+
+/* Hotkey copy polish */
+.hotkeyRow{
+  justify-content:flex-start;
+}
+.hotkeyKeyboard{
+  margin-right:2px;
+  color:#aab4c2;
+  font-size:11px;
+}
+.hotkeyPurpose{
+  color:#d5dce6;
+  font-size:8px;
+  font-weight:600;
+  margin-top:1px;
+}
+.hotkeyHint{
+  color:#6f7a88;
+  font-size:7.2px;
+  line-height:1.35;
+}
+.aboutHotkey{
+  margin-top:9px;
+  padding-top:8px;
+  border-top:1px solid rgba(255,255,255,.07);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.aboutHotkey span{
+  color:#7f8998;
+  font-size:8px;
+}
+.aboutHotkey b{
+  color:#dbe2ec;
+  font-size:9px;
+  font-weight:600;
+}\n\n/* =========================================================\n   v1.0 Phase 2 — Release branding\n   ========================================================= */\n.preferencesFooter{\n  grid-template-columns:1fr 1fr;\n}\n.aboutCredit{\n  margin-top:8px;\n  padding-top:7px;\n  border-top:1px solid rgba(255,255,255,.07);\n  display:flex;\n  align-items:center;\n  justify-content:space-between;\n  gap:8px;\n}\n.aboutCredit span{\n  color:#7f8998;\n  font-size:8px;\n}\n.aboutCredit b{\n  color:#dbe2ec;\n  font-size:9px;\n  font-weight:600;\n}\n

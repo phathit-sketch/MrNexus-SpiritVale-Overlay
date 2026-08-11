@@ -1,0 +1,35 @@
+SpiritVale Drops Overlay v1.0.0 — Phase 2 Release Polish
+
+Created by MrNexus
+
+REPLACE:
+  package.json
+  electrobun.config.ts
+  src/bun/index.ts
+  src/rpc-types.ts
+  src/overlayview/index.tsx
+  src/overlayview/index.html
+  src/overlayview/index.css
+
+ADD:
+  README.md
+  CHANGELOG.md
+  RELEASE_NOTES.md
+  LICENSE
+  .gitignore
+
+WHAT CHANGED:
+- Branding standardized to "SpiritVale Drops Overlay" / "MrNexus"
+- About now shows Created by MrNexus
+- Check Update removed completely for v1.0.0
+- UPDATE_GITHUB_REPO/checkForUpdate removed from Bun backend
+- Update RPC removed
+- Preferences footer simplified to Config + About
+- Package version/author/description set
+- Electrobun app name/description cleaned up
+- Public release documentation added
+- No GitHub updater is included in v1.0.0
+
+IMPORTANT:
+This package intentionally does NOT replace your latest runtime-config.ts, logger.ts,
+version.ts, capture.ts, or portable release script. Keep the versions you just tested.

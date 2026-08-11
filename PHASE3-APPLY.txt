@@ -1,0 +1,45 @@
+SpiritVale Drops Overlay v1.0.0 — Phase 3 Final RC
+Created by MrNexus
+
+REPLACE:
+  src/bun/index.ts
+  src/bun/hotkey-win.ts
+  src/core/capture.ts
+  src/core/logger.ts
+  src/core/runtime-config.ts
+  src/core/sound.ts
+  src/core/version.ts
+  src/win32.ts
+
+KEEP / REPLACE FROM THIS PACKAGE FOR CONSISTENCY:
+  package.json
+  electrobun.config.ts
+  src/rpc-types.ts
+  src/overlayview/index.tsx
+  src/overlayview/index.html
+  src/overlayview/index.css
+  README.md
+  CHANGELOG.md
+  RELEASE_NOTES.md
+  LICENSE
+  .gitignore
+
+WHAT PHASE 3 DOES:
+  - Centralizes app name/version/author in src/core/version.ts.
+  - Logs startup, shutdown, capture failures and uncaught errors.
+  - Keeps packet-level diagnostics disabled in release.
+  - Routes relevant sound/Win32/hotkey warnings into data/logs/YYYY-MM-DD.log.
+  - Keeps portable settings/log paths from the tested portable-path fix.
+  - Does NOT add an updater.
+  - Does NOT change kill/drop attribution logic.
+
+TEST:
+  bun run build:stable
+  bun run release:portable
+
+Then extract the ZIP and verify:
+  data/settings.json
+  data/logs/YYYY-MM-DD.log
+  sounds/packs/
+  Ctrl+Alt+O
+  Drops / Grind / History / Preferences
