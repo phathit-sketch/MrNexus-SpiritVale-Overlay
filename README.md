@@ -97,7 +97,7 @@ SpiritValeDropsOverlay-v1.0.0-win64.zip
 
 จากหน้า
 
-**Releases**
+[**Releases**](https://github.com/phathit-sketch/MrNexus-SpiritVale-Overlay/releases/tag/v1.0.0)
 
 ---
 
