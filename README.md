@@ -6,7 +6,7 @@
 
 Lightweight • Portable • Sound Packs • Own Drop Detection
 
-**Created by MrNexus**
+**Created by MrNexus**<br>
 
 สนับสนุนค่ากาแฟ https://easydonate.app/mrnexus
 
