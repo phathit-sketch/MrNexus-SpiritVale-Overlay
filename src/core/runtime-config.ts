@@ -148,13 +148,58 @@ export function listSoundPacks(): string[] {
   return ["Default", ...names];
 }
 
+const CUSTOM_SOUND_EXTENSIONS = [".wav", ".mp3"] as const;
+
+/**
+ * Resolve a custom sound by logical sound key rather than by one exact extension.
+ *
+ * Examples accepted for the "card_normal" key:
+ *   card_normal.wav
+ *   card_normal.mp3
+ *
+ * The basename must stay the same. If no compatible custom file exists,
+ * return null so the caller can fall back to the built-in Default sound.
+ */
 export function resolveSoundPackOverride(key: SoundFilterKey): string | null {
   const profile = getActiveProfile();
   if (!profile.soundPack || profile.soundPack === "Default") return null;
 
-  const file = SOUND_FILE_NAMES[key];
-  const candidate = join(soundPacksDir(), profile.soundPack, file);
-  return existsSync(candidate) ? candidate : null;
+  const packDir = join(soundPacksDir(), profile.soundPack);
+  if (!existsSync(packDir)) return null;
+
+  // Keep SOUND_FILE_NAMES as the source of truth for the required basename,
+  // but do not force custom packs to use the same extension as Default.
+  const configuredFile = SOUND_FILE_NAMES[key];
+  const dot = configuredFile.lastIndexOf(".");
+  const basename = dot >= 0 ? configuredFile.slice(0, dot) : configuredFile;
+  const preferredExt = dot >= 0 ? configuredFile.slice(dot).toLowerCase() : "";
+
+  // Prefer the Default extension first, then try the other supported format.
+  const extensions = [
+    preferredExt,
+    ...CUSTOM_SOUND_EXTENSIONS.filter((ext) => ext !== preferredExt),
+  ].filter(Boolean);
+
+  // Direct lookup first (fast path).
+  for (const ext of extensions) {
+    const candidate = join(packDir, `${basename}${ext}`);
+    if (existsSync(candidate)) return candidate;
+  }
+
+  // Case-insensitive fallback, useful for files such as CARD_NORMAL.MP3.
+  try {
+    const allowedNames = new Set(
+      extensions.map((ext) => `${basename}${ext}`.toLowerCase())
+    );
+
+    const match = readdirSync(packDir, { withFileTypes: true }).find(
+      (entry) => entry.isFile() && allowedNames.has(entry.name.toLowerCase())
+    );
+
+    return match ? join(packDir, match.name) : null;
+  } catch {
+    return null;
+  }
 }
 
 function settingsPath(): string {

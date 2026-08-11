@@ -10,7 +10,7 @@ import { APP_AUTHOR, APP_NAME, APP_VERSION } from "../core/version";
 import { BrowserView, BrowserWindow } from "electrobun/bun";
 import { registerOverlayHotkey } from "./hotkey-win.ts";
 import type { OverlayRpc } from "../rpc-types.ts";
-import { dpiAware, hideFromTaskbar, setInteractive, setWindowAlpha } from "../win32.ts";
+import { dpiAware, setWindowAlpha } from "../win32.ts";
 import { startWsServer } from "../core/ws-server.ts";
 import { startCapture, setVolume, setOwnOnly, startGrind, stopGrind, refreshRuntimeProfile } from "../core/capture.ts";
 import { getSettings, setVolumeSetting, setOwnOnlySetting, setSoundEnabled, setActiveProfile, createProfile, deleteProfile, listSoundPacks, setSoundPack, settingsFilePath, soundPacksDir, configDirectory, getRememberedWindowFrame, rememberWindowFrame } from "../core/runtime-config.ts";
@@ -49,12 +49,22 @@ let overlayVisible = true;
 function toggleOverlayVisibility(): void {
   overlayVisible = !overlayVisible;
 
-  if (overlayVisible) {
-    // showInactive keeps the game from losing focus.
-    win.showInactive();
-    win.setAlwaysOnTop(true);
-  } else {
-    win.hide();
+  try {
+    if (overlayVisible) {
+      logger.info("Hotkey/UI toggle -> show overlay");
+      win.show();
+      win.setAlwaysOnTop(true);
+      logger.info(`Overlay frame after show: ${JSON.stringify(win.getFrame())}`);
+    } else {
+      logger.info("Hotkey/UI toggle -> hide overlay");
+      win.hide();
+    }
+  } catch (err) {
+    logger.error(
+      `Overlay toggle failed: ${
+        err instanceof Error ? err.stack ?? err.message : String(err)
+      }`
+    );
   }
 }
 
@@ -89,20 +99,60 @@ const rpc = BrowserView.defineRPC<OverlayRpc>({
 
 const rememberedFrame = getRememberedWindowFrame();
 
+logger.info(`Creating BrowserWindow with frame=${JSON.stringify(rememberedFrame)}`);
+
 win = new BrowserWindow({
   title: "SpiritVale Drops Overlay",
   url: "views://overlayview/index.html",
   frame: rememberedFrame,
   titleBarStyle: "hidden",
-  transparent: false, // ทึบ -> คลิกได้ทุกจุด (see-through ใช้ win32 opacity ทั้งหน้าต่าง)
+  transparent: false,
   rpc,
 });
-win.setAlwaysOnTop(true);
-win.show();
 
 ptr = (win as any).ptr;
-hideFromTaskbar(ptr);
-setInteractive(ptr); // NOACTIVATE -> คลิก/ปรับได้ตลอด โดยไม่แย่งโฟกัสเกม
+
+logger.info(`BrowserWindow created. ptrReady=${!!ptr}`);
+logger.info(`Initial overlay frame=${JSON.stringify(win.getFrame())}`);
+
+// DIAGNOSTIC BUILD:
+// Do NOT apply hideFromTaskbar() or setInteractive() here.
+// This intentionally leaves the window as a normal Windows window so we can
+// determine whether custom Win32 extended styles are what make the overlay
+// invisible on affected PCs.
+try {
+  win.setAlwaysOnTop(true);
+  win.show();
+  win.activate();
+
+  logger.info("Diagnostic normal-window show() + activate() called.");
+} catch (err) {
+  logger.error(
+    `Diagnostic window show failed: ${
+      err instanceof Error ? err.stack ?? err.message : String(err)
+    }`
+  );
+}
+
+setTimeout(() => {
+  try {
+    if (!overlayVisible) return;
+
+    win.setAlwaysOnTop(true);
+    win.show();
+    win.activate();
+
+    logger.info(
+      `Diagnostic delayed normal-window show. frame=${JSON.stringify(win.getFrame())}`
+    );
+  } catch (err) {
+    logger.error(
+      `Diagnostic delayed show failed: ${
+        err instanceof Error ? err.stack ?? err.message : String(err)
+      }`
+    );
+  }
+}, 1200);
 
 // Global QoL hotkey: only hides/shows the UI. Capture, grind tracking and
 // rare-drop sounds continue running in the Bun process.
