@@ -1,100 +1,263 @@
+<div align="center">
+
 # SpiritVale Drops Overlay
 
-**Version 1.0.0 — Created by MrNexus**
+### Packet-based Rare Drop Overlay for SpiritVale
 
-A lightweight, portable overlay for SpiritVale that reads network traffic through Npcap to provide rare-drop notifications, grind tracking, drop history, profiles, and custom sound packs.
+Lightweight • Portable • Sound Packs • Own Drop Detection
 
-> This is a community-made utility. It does not modify SpiritVale game files.
+**Created by MrNexus**
 
-## Features
+---
 
-- Rare-drop sound notifications
-- Own-drop filtering
-- Grind session tracking (time, kills, coins, EXP)
-- Rare-drop history and daily statistics
-- Profiles for volume, ownership filtering, and sound filters
-- Custom sound packs with automatic Default fallback
-- Portable settings and logs
-- Global **Ctrl + Alt + O** hotkey to hide/show the overlay while capture continues
+![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011-blue)
+![Version](https://img.shields.io/badge/Version-v1.0.0-success)
+![Status](https://img.shields.io/badge/Status-Stable-brightgreen)
+![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red)
 
-## Requirements
+</div>
 
-- Windows 10 or Windows 11 (64-bit)
-- [Npcap](https://npcap.com/) installed
+---
 
-Npcap is required because the overlay captures network packets. The overlay itself does not need to be installed.
+# 🇹🇭 ภาษาไทย
 
-## Installation
+## SpiritVale Drops Overlay คืออะไร?
 
-1. Install Npcap if it is not already installed.
-2. Download `SpiritValeDropsOverlay-v1.0.0-win64.zip`.
-3. Extract the ZIP completely. Do **not** run it from inside the ZIP.
-4. Open:
+SpiritVale Drops Overlay เป็นโปรแกรม Overlay สำหรับเกม **SpiritVale**
+ที่ตรวจจับ Rare Drop จากข้อมูล Packet ของเกม และแจ้งเตือนผ่านเสียงแบบเรียลไทม์
 
-   `bin/SpiritValeDropsOverlay.exe`
+โปรแกรมถูกออกแบบให้มีขนาดเล็ก ใช้งานง่าย และไม่ต้องติดตั้ง (Portable)
 
-5. Start SpiritVale and play normally.
+---
 
-## Portable folders
+# ✨ คุณสมบัติ
 
-```text
-SpiritValeDropsOverlay-v1.0.0-win64/
-├─ bin/
-│  └─ SpiritValeDropsOverlay.exe
-├─ Resources/
-├─ sounds/
-│  └─ packs/
-└─ data/
-   ├─ settings.json
-   └─ logs/
+- 🎯 ตรวจจับ Rare Drop จาก Packet
+- 👤 ตรวจสอบว่าเป็น Drop ของตัวเอง (Own Drop Detection)
+- 🔊 ระบบ Sound Pack
+- 📊 Grind Tracker
+- 🕒 History
+- 💾 Profiles
+- 🎨 Overlay โปร่งใส
+- ⚡ Ctrl + Alt + O ซ่อน/แสดง Overlay
+- 📦 Portable Build
+- 📝 Runtime Logger
+
+---
+
+# 📷 ตัวอย่าง
+
+## 📊 Grind Tracker and History
+
+<p align="center">
+  <img src="docs/drops.png" width="48%">
+  <img src="docs/history.png" width="48%">
+</p>
+
+---
+
+# 🔒 ความปลอดภัย
+
+Overlay นี้
+
+✅ อ่านข้อมูล Packet เท่านั้น
+
+Overlay นี้
+
+❌ ไม่แก้ไขไฟล์เกม
+
+❌ ไม่ Inject DLL
+
+❌ ไม่ Hook Process
+
+❌ ไม่แก้ Memory
+
+❌ ไม่ส่ง Packet
+
+❌ ไม่มีระบบ Bot
+
+❌ ไม่มี Macro
+
+โปรแกรมทำหน้าที่เพียงอ่านข้อมูล Network และแสดงผลบน Overlay เท่านั้น
+
+---
+
+# 📦 การติดตั้ง
+
+## 1. ดาวน์โหลด Release ล่าสุด
+
+ดาวน์โหลด
+
+```
+SpiritValeDropsOverlay-v1.0.0-win64.zip
 ```
 
-Deleting the extracted folder removes the application and its portable settings.
+จากหน้า
 
-## Sound Packs
+**Releases**
 
-Default sounds live in `sounds/`. Custom packs go in:
+---
 
-```text
-sounds/packs/MyPack/
+## 2. แตกไฟล์
+
+เช่น
+
+```
+SpiritValeDropsOverlay/
 ```
 
-A custom pack only needs the files it wants to replace. Missing files automatically use the Default sound.
+---
 
-Supported override names:
+## 3. ติดตั้ง Npcap
 
-```text
-card_boss.mp3
-card_normal.wav
-gem_boss.mp3
-gem_normal.wav
-essence.wav
-eggs.wav
-lure_boss.wav
+ดาวน์โหลดจาก
+
+https://npcap.com
+
+---
+
+## 4. เปิดโปรแกรม
+
+```
+SpiritValeDropsOverlay.exe
 ```
 
-## Hotkey
+จากนั้นเปิดเกม SpiritVale
 
-**Ctrl + Alt + O** — Hide / Show Overlay
+---
 
-Packet capture, grind tracking, and drop sounds continue while the UI is hidden.
+# ⌨ Hotkey
 
-## Troubleshooting
+```
+Ctrl + Alt + O
+```
 
-**Overlay opens but does not capture anything**  
-Confirm that Npcap is installed and restart the overlay. A Windows restart may be required immediately after installing Npcap.
+ซ่อน / แสดง Overlay
 
-**Where are my settings?**  
-`data/settings.json`
+> แม้ Overlay ถูกซ่อน การตรวจจับ Packet จะยังทำงานต่อ
 
-**Where are crash/application logs?**  
-`data/logs/`
+---
 
-**Where do I put custom sounds?**  
-`sounds/packs/<PackName>/`
+# 🔊 Sound Pack
 
-## Credits
+สามารถสร้าง Sound Pack ได้เอง
 
-Created by **MrNexus**.
+```
+sounds/
+└── packs/
+```
 
-SpiritVale and its related names/assets belong to their respective owners.
+หากไม่มีไฟล์เสียงบางไฟล์
+
+ระบบจะใช้เสียงจาก Default โดยอัตโนมัติ
+
+---
+
+# 👤 Profiles
+
+รองรับหลาย Profile เช่น
+
+- Default
+- Farming
+- Raid
+- Silent
+
+แต่ละ Profile จะจำ
+
+- Volume
+- Opacity
+- Sound Pack
+- Sound Filter
+
+แยกจากกัน
+
+---
+
+# 📁 โครงสร้างโฟลเดอร์
+
+```
+SpiritValeDropsOverlay/
+
+├── bin/
+├── sounds/
+│   └── packs/
+├── data/
+│   ├── logs/
+│   └── settings.json
+└── SpiritValeDropsOverlay.exe
+```
+
+---
+
+# 📝 Log
+
+ไฟล์ Log จะอยู่ที่
+
+```
+data/logs/
+```
+
+ใช้สำหรับตรวจสอบปัญหา
+
+---
+
+# ❓ FAQ
+
+### โปรแกรมแก้ไฟล์เกมหรือไม่?
+
+ไม่
+
+---
+
+### โปรแกรมใช้ Memory Hack หรือไม่?
+
+ไม่
+
+---
+
+### ต้องติดตั้งหรือไม่?
+
+ไม่
+
+เป็น Portable
+
+---
+
+### ต้องติดตั้งอะไรเพิ่มหรือไม่?
+
+ต้องติดตั้ง
+
+Npcap
+
+---
+
+### Sound Pack อยู่ที่ไหน?
+
+```
+sounds/packs/
+```
+
+---
+
+# ❤️ สนับสนุนการพัฒนา
+
+หากโปรแกรมนี้มีประโยชน์สำหรับคุณ
+และต้องการสนับสนุนการพัฒนาต่อ
+
+สามารถสนับสนุน **MrNexus**
+
+> https://easydonate.app/mrnexus
+
+---
+
+# 🇺🇸 English
+
+English documentation will be added soon.
+
+---
+
+# 📄 License
+
+Copyright © 2026 **MrNexus**
+
+All Rights Reserved.
