@@ -50,7 +50,7 @@ SpiritVale Drops Overlay เป็นโปรแกรม Overlay สำหร�
 ## 📊 Grind Tracker and History
 
 <p align="center">
-  <img src="docs/drops.png" width="48%">
+  <img src="docs/grind.png" width="48%">
   <img src="docs/history.png" width="48%">
 </p>
 
